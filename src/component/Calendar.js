@@ -2,42 +2,48 @@ import React from 'react'
 import { styled } from 'styled-components';
 import CalendarRow from './CalendarRow';
 
-const Calendar = ({currenDate}) => {
-    const weekly = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const Calendar = ({currentDate}) => {
+    const weekly = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 
     return (
-        <CalendarTable>
-            <colgroup>
-                <col style={{width:'14.444%'}}></col>
-                <col style={{width:'14.444%'}}></col>
-                <col style={{width:'14.444%'}}></col>
-                <col style={{width:'14.444%'}}></col>
-                <col style={{width:'14.444%'}}></col>
-                <col style={{width:'14.444%'}}></col>
-                <col style={{width:'14.444%'}}></col>
-            </colgroup>
-            <thead>
-                <tr>
-                    {weekly.map((week, i)=>(
-                        <CalendarTable__th key={i} week={week}>{week}</CalendarTable__th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                <CalendarRow currenDate={currenDate} />
-            </tbody>
-        </CalendarTable>
+        <CalendarBox>
+            <div className='calendarBox__div'>
+                {weekly.map((week, i)=>(
+                    <CalendarWeekly key={i} week={week}>{week}</CalendarWeekly>
+                ))}
+            </div>
+            <CalendarRow currentDate={currentDate} />
+        </CalendarBox>
     )
 }
 
 export default Calendar
 
-const CalendarTable = styled.table`
+const CalendarBox = styled.div`
     width:100%;
+    position: relative;
+    & > .calendarBox__div {
+        position: sticky;
+        top:0;
+        left:0;
+        z-index: 3;
+        margin-bottom:20px;
+    } 
+    & .calendarBox__div {
+        display: flex;
+        align-items:center;
+        justify-content:space-between;
+        background-color:#fff;
+        gap:20px;
+        letter-spacing: -1px;
+    } 
 `
 
-const CalendarTable__th = styled.th`
-    font-family: 'NotokrM';
-    text-align:center;
-    color: ${props => props.week === "Sun" ? "red" : props.week === "Sat" ? "blue" : "black"}
+const CalendarWeekly = styled.p`
+    width: 100%;
+    font-family: 'SUITE-Regular';
+    text-align:left;
+    padding:5px 5px 30px;
+    box-sizing: border-box;
+    color: ${props => props.week === "Sun" ? "red" : props.week === "Sat" ? "blue" : "black"};
 `

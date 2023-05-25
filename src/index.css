@@ -2,7 +2,7 @@
 @charset "UTF-8";
 
 * {margin:0;padding:0;}
-html, body{font-family:'NotokrR'; font-size:18px;}
+html, body{font-family:'NotokrR'; font-size:15px;}
 html,body,div,span,object,iframe,
 h1,h2,h3,h4,h5,h6,p,blockquote,pre,
 abbr,address,cite,code,
@@ -108,4 +108,25 @@ code {
     font-style: normal;
     font-weight: 200;
     src: url(./assets/fonts/GmarketSansBold.otf) format('woff');
+}
+
+@font-face {
+    font-family: 'MBC1961GulimM';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/MBC1961GulimL.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SUITE-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Heavy.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ONE-Mobile-Title';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-Title.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
