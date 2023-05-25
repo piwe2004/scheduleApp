@@ -1,0 +1,111 @@
+
+@charset "UTF-8";
+
+* {margin:0;padding:0;}
+html, body{font-family:'NotokrR'; font-size:18px;}
+html,body,div,span,object,iframe,
+h1,h2,h3,h4,h5,h6,p,blockquote,pre,
+abbr,address,cite,code,
+del,dfn,em,img,ins,kbd,q,samp,
+small,strong,sub,sup,var,
+b,i,
+dl,dt,dd,ol,ul,li,
+fieldset,form,label,legend,
+article,aside,canvas,details,figcaption,figure,main,
+footer,header,hgroup,menu,nav,section,summary,
+time,mark,audio,video {border:0;outline:0;background:transparent;}
+table,caption,tbody,tfoot,thead,tr,th,td {outline:0;background:transparent;}
+article,aside,canvas,details,figcaption,figure,main,
+footer,header,hgroup,menu,nav,section,summary {display:block;}
+nav, ul {list-style:none;}
+blockquote,q {quotes:none;}
+blockquote:before,blockquote:after,
+q:before,q:after {content:"";content:none;}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#root{padding:50px; box-sizing: border-box;}
+
+
+@font-face {
+    font-family: 'NotoKrL';
+    font-style: normal;
+    font-weight: 200;
+    src: local('Noto Sans Light'), local('NotoSans-Light'), url(./assets/fonts/NotoSans-Light.eot);
+    src: url(./assets/fonts/NotoSans-Light.eot?#iefix) format('embedded-opentype'),
+    url(./assets/fonts/NotoSans-Light.woff2) format('woff2'),
+    url(./assets/fonts/NotoSans-Light.woff) format('woff');;
+}
+
+@font-face {
+    font-family: 'NotoKrR';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Noto Sans Regular'), local('NotoSans-Regular'), url(./assets/fonts/NotoSans-Regular.eot);
+    src: url(./assets/fonts/NotoSans-Regular.eot?#iefix) format('embedded-opentype'),
+    url(./assets/fonts/NotoSans-Regular.woff2) format('woff2'),
+    url(./assets/fonts/NotoSans-Regular.woff) format('woff');
+}
+@font-face {
+    font-family: 'NotoKrM';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Noto Sans Medium'), local('NotoSans-Medium'), url(./assets/fonts/NotoSans-Medium.eot);
+    src: url(./assets/fonts/NotoSans-Medium.eot?#iefix) format('embedded-opentype'),
+    url(./assets/fonts/NotoSans-Medium.woff2) format('woff2'),
+    url(./assets/fonts/NotoSans-Medium.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'NotoKrB';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Noto Sans Bold'), local('NotoSans-Bold'), url(./assets/fonts/NotoSans-Bold.eot);
+    src: url(./assets/fonts/NotoSans-Bold.eot?#iefix) format('embedded-opentype'),
+    url(./assets/fonts/NotoSans-Bold.woff2) format('woff2'),
+    url(./assets/fonts/NotoSans-Bold.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'gongL';
+    font-style: normal;
+    font-weight: 200;
+    src: url(./assets/fonts/GongGothicLight.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'gongM';
+    font-style: normal;
+    font-weight: 200;
+    src: url(./assets/fonts/GongGothicMedium.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'gongB';
+    font-style: normal;
+    font-weight: 200;
+    src: url(./assets/fonts/GongGothicBold.woff) format('woff');
+}
+@font-face {
+    font-family: 'GmarketSansL';
+    font-style: normal;
+    font-weight: 200;
+    src: url(./assets/fonts/GmarketSansLight.otf) format('woff');
+}
+
+@font-face {
+    font-family: 'GmarketSansM';
+    font-style: normal;
+    font-weight: 200;
+    src: url(./assets/fonts/GmarketSansMedium.otf) format('woff');
+}
+
+@font-face {
+    font-family: 'GmarketSansB';
+    font-style: normal;
+    font-weight: 200;
+    src: url(./assets/fonts/GmarketSansBold.otf) format('woff');
+}
