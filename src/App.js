@@ -6,7 +6,8 @@ import { BiChevronRight, BiChevronLeft, BiDotsHorizontal } from "react-icons/bi"
 import ModalPop from './component/ModalPop';
 
 function App() {
-    const [currentDate, setCurrentDate] = useState(new Date())
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const [schedule, setSchedule] = useState([])
 
     return (
         <>
@@ -22,7 +23,7 @@ function App() {
                         </div>
                     </div>
                     <div>
-                        <ModalPop currentDate={currentDate} />
+                        <ModalPop setSchedule={schedule} />
                     </div>
                 </DateHeader>
                 <Calendar currentDate={currentDate} />
