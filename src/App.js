@@ -4,10 +4,13 @@ import { styled } from "styled-components";
 import { addMonths, format, subMonths } from 'date-fns';
 import { BiChevronRight, BiChevronLeft, BiDotsHorizontal } from "react-icons/bi";
 import ModalPop from './component/ModalPop';
+import { useDispatch } from "react-redux";
 
 function App() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [schedule, setSchedule] = useState([])
+
+    
 
     return (
         <>

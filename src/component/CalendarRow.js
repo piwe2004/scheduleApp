@@ -1,8 +1,11 @@
 import React from 'react'
 import { addDays, endOfMonth, format, getWeeksInMonth, isSameMonth, startOfMonth, startOfWeek } from 'date-fns'
 import { styled } from 'styled-components';
+import { useSelector } from 'react-redux';
+import CalendarItem from './CalendarItem';
 
 const CalendarRow = ({currentDate}) => {
+
 
     // 월의 시작일
     const monthStart = startOfMonth(currentDate);
@@ -17,6 +20,8 @@ const CalendarRow = ({currentDate}) => {
     const currentMonth = new Date().getMonth() === currentDate.getMonth();
     let days = startDate;
 
+
+    
     return (
         <CalendarDaysBox>
             {weekArray.map((week, i)=> (
@@ -30,7 +35,10 @@ const CalendarRow = ({currentDate}) => {
                             }
                         >
                             <CalendarDay className='days-div__content__span'>
-                                <span>{format(days,'d') < 10 ? "0"+format(days,'d') : format(days,'d')}</span>
+                                <span>{format(days,'dd')}</span>
+                                <ul>
+                                    <CalendarItem itemDate={days} />
+                                </ul>
                             </CalendarDay>
                         </CalendarDays>
                     ))}

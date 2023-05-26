@@ -4,6 +4,7 @@ import ReactDatePicker from 'react-datepicker'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Header, Icon, Input, Modal, TextArea } from 'semantic-ui-react'
 import { styled } from 'styled-components'
+import { add_schedule } from '../reducers/schedule'
 
 
 const ModalPop = ({schedule}) => {
@@ -17,18 +18,21 @@ const ModalPop = ({schedule}) => {
     const [changeDate, setChangeDate] = useState('')
     //내용
     const [scheduleCnt, setscheduleCnt] = useState('')
-    console.log(scheduleCnt)
-
     const changDate = (e) =>{
         return e && setChangeDate(format(e, "yyyy-MM-dd"))
     }
 
-    const addSchedule = () => {
-        dispatch(addSchedule());
+    const createSchedule = () => {
+        dispatch(add_schedule());
     }
 
     const handleAddSchedule = () =>{
-
+        dispatch(add_schedule({
+            title:scheduleTitle,
+            date:changeDate,
+            content:scheduleCnt
+        }))
+        setModalPop(false)
     }
 
     
