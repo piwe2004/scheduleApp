@@ -1,21 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { applyMiddleware, compose, createStore } from 'redux';
-import { Provider, useDispatch } from 'react-redux';
-import logger from 'redux-logger';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import App from './App';
-import rootReducer from './reducers';
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+import persistReducer from "./reducers";
+
+
+
 import 'semantic-ui-css/semantic.min.css'
 import './index.css';
 
-const store = createStore(rootReducer);
+const store = createStore(persistReducer);
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const persistor = persistStore(store);
 
 const render = () => root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <App />
+            <PersistGate loading={null} persistor={persistor}>
+                <App />
+            </PersistGate>
         </Provider>
     </React.StrictMode>,
     document.getElementById('root'),

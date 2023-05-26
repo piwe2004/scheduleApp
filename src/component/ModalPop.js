@@ -22,16 +22,22 @@ const ModalPop = ({schedule}) => {
         return e && setChangeDate(format(e, "yyyy-MM-dd"))
     }
 
-    const createSchedule = () => {
-        dispatch(add_schedule());
-    }
-
     const handleAddSchedule = () =>{
         dispatch(add_schedule({
             title:scheduleTitle,
             date:changeDate,
             content:scheduleCnt
         }))
+        setScheduleTitle('');
+        setChangeDate('');
+        setscheduleCnt('');
+        setModalPop(false)
+    }
+
+    const setModalClose = () =>{
+        setScheduleTitle('');
+        setChangeDate('');
+        setscheduleCnt('');
         setModalPop(false)
     }
 
@@ -39,7 +45,7 @@ const ModalPop = ({schedule}) => {
     return (
         <PopupBox>
             <Modal
-                onClose={()=>setModalPop(false)}
+                onClose={()=>setModalClose()}
                 onOpen={()=>setModalPop(true)}
                 open={modalPop}
                 trigger={<Button>일정 등록</Button>}
@@ -59,7 +65,7 @@ const ModalPop = ({schedule}) => {
                     </Form>
                 </ModalContainer>
                 <Modal.Actions>
-                    <Button color='black' onClick={() => setModalPop(false)}>취소</Button>
+                    <Button color='black' onClick={() => setModalClose()}>취소</Button>
                     <Button
                         content="등록"
                         labelPosition='right'
