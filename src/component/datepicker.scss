@@ -1,0 +1,80 @@
+.react-datepicker-popper{
+    width:300px;
+    background-color: #fff;
+    border:1px solid #000;
+    box-shadow:5px 5px 5px rgba(0,0,0,0.5);
+    border-radius:5px;
+    top:50% !important;
+    left:50% !important;
+    transform: translate(-50%, -50%) !important;
+    overflow-y:auto;
+    max-height:500px;
+    z-index: 10;
+    box-sizing: border-box;
+    padding:15px;
+    
+    .react-datepicker__div-custom{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .react-datepicker__navigation{
+            background-color:#fff;
+            border:none;
+            font-size:25px;
+            line-height:100%;
+            cursor:pointer;
+            i {
+                color:#000;
+            }
+        }
+        .react-datepicker__current-month{
+            font-size:25px;
+            font-family:'ONE-Mobile-Title';
+            font-weight:800;
+            letter-spacing: -1px;
+        }
+    }
+    .react-datepicker__day-names{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin:15px 0;
+        font-family:'SUITE-Regular';
+        text-align: center;
+        .react-datepicker__day-name{
+            width: 14.44%;
+            text-align: center;
+        }
+        :first-child{
+            color:#e30f0f
+        }
+        :last-child{
+            color:#0c39c6
+        }
+    }
+    .react-datepicker__month{
+        .react-datepicker__week{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .react-datepicker__day{
+                width:14.44%;
+                text-align: center;
+                padding:10px 0;
+                box-sizing: border-box;
+                &.react-datepicker__day--selected{
+                    background-color:#000;
+                    border-radius: 50%;
+                    color:#fff;
+                    width:35px; height:35px;
+                }
+            }
+        }
+    }
+    .react-datepicker__time-container {
+
+    }
+}
+.react-datepicker__header {
+    
+}

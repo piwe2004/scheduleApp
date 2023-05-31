@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import { useSelector } from 'react-redux';
 import CalendarItem from './CalendarItem';
 
-const CalendarRow = ({currentDate}) => {
+const CalendarRow = ({currentDate, handleModal}) => {
 
 
     // 월의 시작일
@@ -36,9 +36,7 @@ const CalendarRow = ({currentDate}) => {
                         >
                             <CalendarDay className='days-div__content__span'>
                                 <span>{format(days,'dd')}</span>
-                                <ul>
-                                    <CalendarItem itemDate={days} />
-                                </ul>
+                                <CalendarItem handleModal={handleModal} currentDay={days} />
                             </CalendarDay>
                         </CalendarDays>
                     ))}
@@ -59,6 +57,7 @@ const CalendarDaysBox = styled.div`
 const CalendarDays = styled.li`
     width: 100%;
     border-top: 2px solid #0a0a0a;
+    transition: all .3s ease-in-out;
     &.ohterMonth{
         opacity:0.2;
     }
@@ -83,6 +82,7 @@ const CalendarDays = styled.li`
     }
     &:not(.ohterMonth) .days-div__content__span:hover{
         box-shadow: 2px 0px 10px rgba(0,0,0,0.1);
+        background-color: #f4f1ef;
     }  
 `
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "./component/Calendar";
 import { styled } from "styled-components";
 import { addMonths, format, subMonths } from 'date-fns';
@@ -9,7 +9,13 @@ import { useDispatch } from "react-redux";
 function App() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [schedule, setSchedule] = useState([])
-
+    const [modalState, setModalState] = useState(false)
+    const handleModal = useEffect(() => {
+        setModalState(true)
+    }, [modalState])
+    console.log(modalState);
+    
+    
     
 
     return (
@@ -26,10 +32,10 @@ function App() {
                         </div>
                     </div>
                     <div>
-                        <ModalPop setSchedule={schedule} />
+                        <ModalPop modalState={modalState} setSchedule={schedule} />
                     </div>
                 </DateHeader>
-                <Calendar currentDate={currentDate} />
+                <Calendar handleModal={handleModal} currentDate={currentDate} />
             </DateWrap>
         </>
     );

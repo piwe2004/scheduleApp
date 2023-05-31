@@ -2,7 +2,7 @@ import React from 'react'
 import { styled } from 'styled-components';
 import CalendarRow from './CalendarRow';
 
-const Calendar = ({currentDate}) => {
+const Calendar = ({currentDate, handleModal}) => {
     const weekly = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 
     return (
@@ -12,7 +12,7 @@ const Calendar = ({currentDate}) => {
                     <CalendarWeekly key={i} week={week}>{week}</CalendarWeekly>
                 ))}
             </div>
-            <CalendarRow currentDate={currentDate} />
+            <CalendarRow handleModal={handleModal} currentDate={currentDate} />
         </CalendarBox>
     )
 }

@@ -2,42 +2,45 @@ import { format } from 'date-fns'
 import React, { useState } from 'react'
 import ReactDatePicker from 'react-datepicker'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Divider, Form, Header, Icon, Input, Modal, TextArea } from 'semantic-ui-react'
+import { Button, Form, Icon, Input, Modal, TextArea } from 'semantic-ui-react'
 import { styled } from 'styled-components'
 import { add_schedule } from '../reducers/schedule'
+import "./datepicker.scss"
 
 
-const ModalPop = ({schedule}) => {
+const ModalPop = ({modalState}) => {
 
     const dispatch = useDispatch();
-
-    const [modalPop, setModalPop] = useState(false)
+    const [modalPop, setModalPop] = useState(modalState)
     //제목
     const [scheduleTitle, setScheduleTitle] = useState('')
     // 날짜
-    const [changeDate, setChangeDate] = useState('')
+    const [currentDate, setCrrentDate] = useState('')
+    //시간
+    const [currentTime, setCurrentTime] = useState('');
     //내용
-    const [scheduleCnt, setscheduleCnt] = useState('')
-    const changDate = (e) =>{
-        return e && setChangeDate(format(e, "yyyy-MM-dd"))
+    const [scheduleCnt, setscheduleCnt] = useState('');
+    const changeDate = (e) =>{
+        setCrrentDate(format(e, "yyyy-MM-dd"));
+    }
+    const changeTime = (e) =>{
+        setCurrentTime(format(e, "HH:mm"));
     }
 
     const handleAddSchedule = () =>{
         dispatch(add_schedule({
             title:scheduleTitle,
-            date:changeDate,
-            content:scheduleCnt
+            date:new Date(`${currentDate} ${currentTime}`),
+            content:scheduleCnt,
         }))
-        setScheduleTitle('');
-        setChangeDate('');
-        setscheduleCnt('');
-        setModalPop(false)
+        setModalClose()
     }
 
     const setModalClose = () =>{
         setScheduleTitle('');
-        setChangeDate('');
+        setCrrentDate('');
         setscheduleCnt('');
+        setCurrentTime('');
         setModalPop(false)
     }
 
@@ -48,7 +51,7 @@ const ModalPop = ({schedule}) => {
                 onClose={()=>setModalClose()}
                 onOpen={()=>setModalPop(true)}
                 open={modalPop}
-                trigger={<Button>일정 등록</Button>}
+                trigger={<Button style={{fontSize:'14px', padding:'11px 20px'}}>일정 등록</Button>}
                 style={{width:"95%", maxWidth:"500px"}}
             >
                 <Modal.Header style={{fontFamily:'SUITE-Regular', fontSize:'17px', padding:'15px 20px'}}>일정 등록</Modal.Header>
@@ -56,10 +59,56 @@ const ModalPop = ({schedule}) => {
                     <Form style={{padding:20, boxSizing:'border-box'}}>
                         <Modal.Content style={{display:'flex', gap:'20px', flexFlow:'row wrap', }}>
                             <Input transparent placeholder="제목" defaultValue={scheduleTitle} onChange={(e)=>setScheduleTitle(e.target.value)} />
-                            <ModalCalendar>
-                                <Input placeholder={format(new Date(), "yyyy-MM-dd")} readOnly transparent defaultValue={changeDate}  icon={<Icon name="calendar" alternate="true" outline="true" />}  />
-                                <ReactDatePicker selected={new Date()} onChange={(date) => changDate(date)} />
-                            </ModalCalendar>
+                            <CalendarCnt>
+                                <ModalCalendar>
+                                    <Input placeholder={format(new Date(), "yyyy-MM-dd")} readOnly transparent value={currentDate}  icon={<Icon name="calendar" alternate="true" outline="true" />} />
+                                    <ReactDatePicker 
+                                        selected={currentDate? new Date(currentDate) : new Date()}
+                                        onChange={(date) => changeDate(date)}
+                                        useWeekdaysShort={true}
+                                        disabledKeyboardNavigation
+                                        renderCustomHeader={({monthDate, decreaseMonth, increaseMonth})=>(
+                                            <div className='react-datepicker__div-custom'>
+                                                <button
+                                                    aria-label="Previous Month"
+                                                    className={
+                                                    "react-datepicker__navigation react-datepicker__navigation--previous"
+                                                    }
+                                                    onClick={decreaseMonth}
+                                                >
+                                                    <Icon name="angle left" />
+                                                </button>
+                                                <span className="react-datepicker__current-month">
+                                                    {monthDate.toLocaleString("en-US", {
+                                                        month: "numeric",
+                                                        year:"numeric"
+                                                    }).replace("/", ", ")}
+                                                </span>
+                                                <button
+                                                    aria-label="Next Month"
+                                                    className={
+                                                    "react-datepicker__navigation react-datepicker__navigation--next"
+                                                    }
+                                                    onClick={increaseMonth}
+                                                >
+                                                    <Icon name="angle right" />
+                                                </button>
+                                            </div>
+                                        )}
+                                    />
+                                </ModalCalendar>
+                                <ModalCalendar>
+                                    <Input placeholder={format(new Date(), "k:mm")} readOnly transparent defaultValue={currentTime}  icon={<Icon name="clock outline" alternate="true" outline="true" />}  />
+                                    <ReactDatePicker 
+                                        selected={new Date()} 
+                                        onChange={(date) => changeTime(date)}
+                                        showTimeSelect
+                                        showTimeSelectOnly
+                                        timeFormat="HH:mm"
+                                        timeIntervals={15}
+                                    />
+                                </ModalCalendar>
+                            </CalendarCnt>
                             <TextArea placeholder='내용' style={{ minHeight: 100, width:'100%' }} defaultValue={scheduleCnt} onChange={(e)=>setscheduleCnt(e.target.value)} />
                         </Modal.Content>
                     </Form>
@@ -117,6 +166,16 @@ const ModalContainer = styled.div`
     }
 `
 
+const CalendarCnt = styled.div`
+    display: flex;
+    align-items:center;
+    justify-content: space-between;
+    width: 100%;
+    > div{
+        width: 47%;
+    }
+`
+
 const ModalCalendar = styled.div`
     position: relative;
     display: inline-block;
@@ -132,6 +191,7 @@ const ModalCalendar = styled.div`
         .react-datepicker__input-container, & input {
             width:100%;
             height:100%;
+            font-family:'NotokrR';
         }
     }
 `
