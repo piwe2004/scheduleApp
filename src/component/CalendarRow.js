@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import { useSelector } from 'react-redux';
 import CalendarItem from './CalendarItem';
 
-const CalendarRow = ({currentDate, handleModal}) => {
+const CalendarRow = ({currentDate, editModal}) => {
 
 
     // 월의 시작일
@@ -36,7 +36,7 @@ const CalendarRow = ({currentDate, handleModal}) => {
                         >
                             <CalendarDay className='days-div__content__span'>
                                 <span>{format(days,'dd')}</span>
-                                <CalendarItem handleModal={handleModal} currentDay={days} />
+                                <CalendarItem editModal={(e) => editModal(e)} currentDay={days} />
                             </CalendarDay>
                         </CalendarDays>
                     ))}

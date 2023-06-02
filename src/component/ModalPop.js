@@ -1,17 +1,18 @@
 import { format } from 'date-fns'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDatePicker from 'react-datepicker'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch} from 'react-redux'
 import { Button, Form, Icon, Input, Modal, TextArea } from 'semantic-ui-react'
 import { styled } from 'styled-components'
-import { add_schedule } from '../reducers/schedule'
+import { add_schedule, edit_schedule } from '../reducers/schedule'
 import "./datepicker.scss"
 
 
-const ModalPop = ({modalState}) => {
+const ModalPop = ({modalOpen, closeModal, editMode, editData}) => {
 
     const dispatch = useDispatch();
-    const [modalPop, setModalPop] = useState(modalState)
+    //수정내용
+    
     //제목
     const [scheduleTitle, setScheduleTitle] = useState('')
     // 날짜
@@ -20,6 +21,11 @@ const ModalPop = ({modalState}) => {
     const [currentTime, setCurrentTime] = useState('');
     //내용
     const [scheduleCnt, setscheduleCnt] = useState('');
+    //완료체크
+    const [isChecked, setIsChecked] = useState(false)
+    //에러체크
+    const [dataError, setDataError] = useState({})
+
     const changeDate = (e) =>{
         setCrrentDate(format(e, "yyyy-MM-dd"));
     }
@@ -27,13 +33,66 @@ const ModalPop = ({modalState}) => {
         setCurrentTime(format(e, "HH:mm"));
     }
 
+    useEffect(() => {
+        if(editMode){
+                setScheduleTitle(editData.title)
+                setCrrentDate(format(new Date(editData.date), "yyyy-MM-dd"))
+                setCurrentTime(format(new Date(editData.date), "HH:mm"))
+                setscheduleCnt(editData.content)
+                setIsChecked(editData.isComplate)
+        }
+    }, [modalOpen])
+
+
+
+    const dataChecked = () => {
+        if(!scheduleTitle || !currentDate){
+            if(!scheduleTitle && !currentDate){
+                setDataError({title:false, date:false});
+            }else if(!scheduleTitle){
+                setDataError({title:false});
+            }else if(!currentDate){
+                setDataError({date:false});
+            }
+            return false
+        }
+        return true
+    }
+
+    useEffect(() => {
+        if(Object.keys(dataError).length > 0){
+            if(scheduleTitle.length > 0){
+                setDataError({title:true});
+                console.log(dataError)
+            }
+            if(currentDate.length > 0){
+                setDataError({date:true});
+                console.log(dataError)
+            }
+        }
+    }, [scheduleTitle, currentDate])
+
     const handleAddSchedule = () =>{
-        dispatch(add_schedule({
-            title:scheduleTitle,
-            date:new Date(`${currentDate} ${currentTime}`),
-            content:scheduleCnt,
-        }))
-        setModalClose()
+
+        if(dataChecked()){
+            if(!editMode){
+                dispatch(add_schedule({
+                    title:scheduleTitle,
+                    date:new Date(`${currentDate} ${currentTime}`),
+                    content:scheduleCnt,
+                    isComplate:false
+                }))
+            }else{
+                dispatch(edit_schedule({
+                    keyId:editData.keyId,
+                    title:scheduleTitle,
+                    date:new Date(`${currentDate} ${currentTime}`),
+                    content:scheduleCnt,
+                    isComplate:isChecked
+                }))
+            }
+            setModalClose()
+        }
     }
 
     const setModalClose = () =>{
@@ -41,27 +100,50 @@ const ModalPop = ({modalState}) => {
         setCrrentDate('');
         setscheduleCnt('');
         setCurrentTime('');
-        setModalPop(false)
+        setDataError({})
+        closeModal();
     }
 
     
     return (
         <PopupBox>
             <Modal
-                onClose={()=>setModalClose()}
-                onOpen={()=>setModalPop(true)}
-                open={modalPop}
-                trigger={<Button style={{fontSize:'14px', padding:'11px 20px'}}>일정 등록</Button>}
+                open={modalOpen}
                 style={{width:"95%", maxWidth:"500px"}}
             >
                 <Modal.Header style={{fontFamily:'SUITE-Regular', fontSize:'17px', padding:'15px 20px'}}>일정 등록</Modal.Header>
                 <ModalContainer>
-                    <Form style={{padding:20, boxSizing:'border-box'}}>
-                        <Modal.Content style={{display:'flex', gap:'20px', flexFlow:'row wrap', }}>
-                            <Input transparent placeholder="제목" defaultValue={scheduleTitle} onChange={(e)=>setScheduleTitle(e.target.value)} />
+                    <Modal.Content>
+                        <Form style={{padding:20, boxSizing:'border-box', display:'flex', gap:'20px', flexFlow:'row wrap'}}>
+                            <Form.Field
+                                id='form-input-control-title'
+                                control={Input}
+                                placeholder="제목"
+                                value={scheduleTitle}
+                                transparent
+                                onChange={(e)=>setScheduleTitle(e.target.value)}
+
+                                error={dataError.title === false && {
+                                    content: '제목을 입력해 주세요.',
+                                    pointing: 'below',
+                                }}
+                                />
                             <CalendarCnt>
                                 <ModalCalendar>
-                                    <Input placeholder={format(new Date(), "yyyy-MM-dd")} readOnly transparent value={currentDate}  icon={<Icon name="calendar" alternate="true" outline="true" />} />
+                                    <Form.Field
+                                        id='form-input-control-date'
+                                        readOnly
+                                        control={Input}
+                                        placeholder={format(new Date(), "yyyy-MM-dd")}
+                                        value={currentDate}
+                                        icon={<Icon name="calendar" alternate="true" outline="true" />}
+                                        transparent
+                                        error={dataError.date === false && {
+                                            content: '날짜를 입력해 주세요.',
+                                            pointing: 'below',
+                                        }}
+                                    />
+                                    {/* <Input placeholder={format(new Date(), "yyyy-MM-dd")} readOnly transparent value={currentDate}  icon={<Icon name="calendar" alternate="true" outline="true" />} /> */}
                                     <ReactDatePicker 
                                         selected={currentDate? new Date(currentDate) : new Date()}
                                         onChange={(date) => changeDate(date)}
@@ -110,13 +192,13 @@ const ModalPop = ({modalState}) => {
                                 </ModalCalendar>
                             </CalendarCnt>
                             <TextArea placeholder='내용' style={{ minHeight: 100, width:'100%' }} defaultValue={scheduleCnt} onChange={(e)=>setscheduleCnt(e.target.value)} />
-                        </Modal.Content>
-                    </Form>
+                        </Form>
+                    </Modal.Content>
                 </ModalContainer>
                 <Modal.Actions>
                     <Button color='black' onClick={() => setModalClose()}>취소</Button>
                     <Button
-                        content="등록"
+                        content={editMode ? "수정" : "등록"}
                         labelPosition='right'
                         icon='checkmark'
                         onClick={() => handleAddSchedule()}
@@ -150,6 +232,19 @@ const PopupBox = styled.div`
 `
 
 const ModalContainer = styled.div`
+    .ui.form {
+        .field{
+            width:100%;
+            margin:0;
+            position: relative;
+        }
+        .error.field{
+            .ui.below.prompt{
+                position: absolute;
+                top:-30px;
+            }
+        }
+    } 
     .ui.input{
         border-bottom:1px solid rgba(34,36,38,.15);
         min-height:38px;
