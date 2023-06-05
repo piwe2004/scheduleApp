@@ -22,7 +22,7 @@ const CalendarItem = ({currentDay, editModal}) => {
                                 return(
                                     itemDate === dateDay  &&
                                         <li 
-                                            className='calendarItem__li-items' 
+                                            className={`calendarItem__li-items ${schedule.isComplate ? 'item-complate' : ''}`}
                                             key={schedule.keyId}
                                             onClick={() => editModal(schedule)}
                                         >
@@ -71,6 +71,13 @@ const ItemList = styled.ul`
         .calendarItem__items__p-title{
             font-family:'SUITE-Regular';
             font-size:20px;
+        }
+
+        &.item-complate{
+            .calendarItem__items__p-date, .calendarItem__items__p-title{
+                text-decoration: line-through;
+                color:#b1b1b1;
+            }
         }
     }
     

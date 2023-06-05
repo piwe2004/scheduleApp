@@ -8,7 +8,6 @@ const currentSchedule = {
 export const ADD = "ADD_SCHEDULE";
 export const DELETE = "DELETE_SCHEDULE";
 export const EDIT = "EDIT_SCHEDULE";
-export const SUCCESS = "SCHEDULE/SUCCESS";
 
 
 export const add_schedule = ({title, date, content, isComplate}) => {

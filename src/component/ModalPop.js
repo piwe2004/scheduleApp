@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import React, { useEffect, useState } from 'react'
 import ReactDatePicker from 'react-datepicker'
 import { useDispatch} from 'react-redux'
-import { Button, Form, Icon, Input, Modal, TextArea } from 'semantic-ui-react'
+import { Button, Checkbox, Confirm, Form, Icon, Input, Modal, TextArea } from 'semantic-ui-react'
 import { styled } from 'styled-components'
 import { add_schedule, delete_schedule, edit_schedule } from '../reducers/schedule'
 import "./datepicker.scss"
@@ -25,9 +25,11 @@ const ModalPop = ({modalOpen, closeModal, viewMode, editData}) => {
     const [isChecked, setIsChecked] = useState(false)
     //에러체크
     const [dataError, setDataError] = useState({})
-
     //수정여부 확인
     const [editMode, setEditMode] = useState(false)
+    // 삭제 확인
+    const [deleteCheck, setDeleteCheck] = useState(false)
+
 
     const changeMode = () => {
         setEditMode(true);
@@ -90,7 +92,7 @@ const ModalPop = ({modalOpen, closeModal, viewMode, editData}) => {
 
     const deleteData = () => {
         dispatch(delete_schedule(editData.keyId))
-        console.log(editData.keyId)
+        setDeleteCheck(false)
         setModalClose()
     }
 
@@ -118,6 +120,10 @@ const ModalPop = ({modalOpen, closeModal, viewMode, editData}) => {
     }
 
     const setModalClose = () =>{
+        if(!editMode & editData.isComplate !== isChecked){
+            editData.isComplate = isChecked
+            dispatch(edit_schedule(editData))
+        }
         setScheduleTitle('');
         setCrrentDate('');
         setscheduleCnt('');
@@ -217,6 +223,13 @@ const ModalPop = ({modalOpen, closeModal, viewMode, editData}) => {
                                 </ModalCalendar>
                             </CalendarCnt>
                             <TextArea readOnly={viewMode & !editMode ? true : false} placeholder='내용' style={{ minHeight: 100, width:'100%' }} defaultValue={scheduleCnt} onChange={(e)=>setscheduleCnt(e.target.value)} />
+                            <Button 
+                                size='mini'
+                                color={isChecked ? 'blue' : ''}
+                                onClick={()=>setIsChecked(!isChecked)}
+                            >
+                                일정완료
+                            </Button>
                         </Form>
                     </Modal.Content>
                 </ModalContainer>
@@ -249,9 +262,17 @@ const ModalPop = ({modalOpen, closeModal, viewMode, editData}) => {
                                     <Button
                                         content='삭제'
                                         color='red' 
-                                        onClick={() => deleteData()}
+                                        onClick={() => setDeleteCheck(true)}
                                         icon='trash alternate outline'
-                                    /> 
+                                    />
+                                    <Confirm
+                                        content="일정을 삭제 하시겠습니까?"
+                                        open={deleteCheck}
+                                        cancelButton='아니요'
+                                        confirmButton='네'
+                                        onCancel={()=>setDeleteCheck(false)}
+                                        onConfirm={()=>deleteData()}
+                                    />
                                     <Button
                                         content='수정하기'
                                         color='facebook' 
