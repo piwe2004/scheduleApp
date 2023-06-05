@@ -120,7 +120,7 @@ const ModalPop = ({modalOpen, closeModal, viewMode, editData}) => {
     }
 
     const setModalClose = () =>{
-        if(!editMode & editData.isComplate !== isChecked){
+        if(viewMode & !editMode & editData.isComplate !== isChecked){
             editData.isComplate = isChecked
             dispatch(edit_schedule(editData))
         }
