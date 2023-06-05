@@ -6,7 +6,7 @@ const currentSchedule = {
 }
 
 export const ADD = "ADD_SCHEDULE";
-export const DELETE = "SCHEDULE/DELETE";
+export const DELETE = "DELETE_SCHEDULE";
 export const EDIT = "EDIT_SCHEDULE";
 export const SUCCESS = "SCHEDULE/SUCCESS";
 
@@ -25,7 +25,6 @@ export const add_schedule = ({title, date, content, isComplate}) => {
 };
 
 export const edit_schedule = ({keyId, title, date, content, isComplate}) => {
-    console.log()
     return{
         type:EDIT,
         scheduleList:{
@@ -35,6 +34,13 @@ export const edit_schedule = ({keyId, title, date, content, isComplate}) => {
             content,
             isComplate
         }
+    }
+};
+
+export const delete_schedule = (keyId) => {
+    return{
+        type:DELETE,
+        keyId
     }
 };
 
@@ -48,6 +54,10 @@ const schedule = (state = currentSchedule, action) => {
         case EDIT :
             return {
                 scheduleList : [...state.scheduleList.slice(0, action.scheduleList.keyId), action.scheduleList, ...state.scheduleList.slice(action.scheduleList.keyId + 1) ]
+            }
+        case DELETE :
+            return {
+                scheduleList : [...state.scheduleList.filter(x => x.keyId !== action.keyId)]
             }
         default :
         return state

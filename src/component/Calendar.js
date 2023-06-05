@@ -5,6 +5,7 @@ import { addMonths, format, subMonths } from 'date-fns';
 import { BiChevronRight, BiChevronLeft, BiDotsHorizontal } from "react-icons/bi";
 import ModalPop from './ModalPop';
 import { Button } from 'semantic-ui-react';
+import ItemView from './ItemView';
 
 const Calendar = ({handleModal}) => {
     const weekly = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
@@ -12,20 +13,24 @@ const Calendar = ({handleModal}) => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [schedule, setSchedule] = useState([])
     const [modalOpen, setModalOpen] = useState(false);
-    const [editMode, setEditMode] = useState(false)
+    const [viewMode, setViewMode] = useState(false)
     const [editData, seteditData] = useState({})
+
+    const [showSide, setShowSide] = useState(false)
+    const closeSide = () => {
+        setShowSide(false);
+    }
 
     const closeModal = () => {
         setModalOpen(false)
-        setEditMode(false)
+        setViewMode(false)
         seteditData({})
     }
     const editModal = (e) => {
         setModalOpen(true)
-        setEditMode(true)
+        setViewMode(true)
         seteditData(e)
     }
-
     return (
         <DateWrap>
             <DateHeader>
@@ -39,11 +44,11 @@ const Calendar = ({handleModal}) => {
                     </div>
                 </div>
                 <div>
-                    <Button primary onClick={()=>setModalOpen(true)}>Primary</Button>
+                    <Button primary onClick={()=>setModalOpen(true)}>일정등록</Button>
                     <ModalPop 
                         modalOpen={modalOpen} 
                         closeModal={closeModal}
-                        editMode={editMode}
+                        viewMode={viewMode}
                         editData={editData} 
                     />
                 </div>
@@ -56,6 +61,7 @@ const Calendar = ({handleModal}) => {
                 </div>
                 <CalendarRow editModal={(e) => editModal(e)} currentDate={currentDate} />
             </CalendarBox>
+            {/* <ItemView showSide={showSide} editData={editData} closeSide={closeSide} changeEdit={changeEdit} /> */}
         </DateWrap>
     )
 }
@@ -114,7 +120,7 @@ const CalendarBox = styled.div`
     } 
     & .calendarBox__div {
         display: flex;
-        align-items:flex-start;
+        align-items:stretch;
         justify-content:space-between;
         background-color:#fff;
         gap:20px;

@@ -34,7 +34,7 @@ const CalendarRow = ({currentDate, editModal}) => {
                                 `days-div__content ${!isSameMonth(days, monthStart) ? 'ohterMonth' : ''} ${idx === 0 ? 'CalendarDays_sun' : idx === 6 ? 'CalendarDays_sat' : ''} ${Number(format(days, 'd')) === new Date().getDate() && Number(format(days, 'M')) === new Date().getMonth()+1 ? "calendarToday" : '' }`
                             }
                         >
-                            <CalendarDay className='days-div__content__span'>
+                            <CalendarDay className='days-div__content__div'>
                                 <span>{format(days,'dd')}</span>
                                 <CalendarItem editModal={(e) => editModal(e)} currentDay={days} />
                             </CalendarDay>
@@ -58,6 +58,7 @@ const CalendarDays = styled.li`
     width: 100%;
     border-top: 2px solid #0a0a0a;
     transition: all .3s ease-in-out;
+    height:100%;
     &.ohterMonth{
         opacity:0.2;
     }
@@ -77,10 +78,10 @@ const CalendarDays = styled.li`
         border-top-color:#fd8c0e !important;
         background-color:#f8f8f8 !important;
     }
-    &.calendarToday .days-div__content__span > span{
+    &.calendarToday .days-div__content__div > span{
         color:#fd8c0e !important;
     }
-    &:not(.ohterMonth) .days-div__content__span:hover{
+    &:not(.ohterMonth) .days-div__content__div:hover{
         box-shadow: 2px 0px 10px rgba(0,0,0,0.1);
         background-color: #f4f1ef;
     }  
@@ -92,6 +93,7 @@ const CalendarDay = styled.div`
     padding:10px 5px 16px;
     box-sizing: border-box;
     transition: all .3s ease-in-out;
+    height: 100%;
     span {
         font-family: 'MBC1961GulimM';
         font-size:28px;

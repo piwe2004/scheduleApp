@@ -1,8 +1,9 @@
 import { format } from 'date-fns'
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import schedule from './../reducers/schedule';
 import { styled } from 'styled-components';
+import ItemView from './ItemView';
 
 const CalendarItem = ({currentDay, editModal}) => {
 
@@ -11,27 +12,29 @@ const CalendarItem = ({currentDay, editModal}) => {
 
     if(schedulsDataList.length > 0){
         return(
-            <ItemList>
-                {schedulsDataList.map((schedule, i) => {
-                    const itemDate = format(new Date(schedule.date), "yyyy-MM-dd");
-                    // eslint-disable-next-line no-lone-blocks
-                    {
-                        if(i < 3 ){
-                            return(
-                                itemDate === dateDay  &&
-                                    <li 
-                                        className='calendarItem__li-items' 
-                                        key={schedule.keyId}
-                                        onClick={() => editModal(schedule)}
-                                    >
-                                        <p className='calendarItem__items__p-date'>{format(new Date(schedule.date), "HH:mm")}</p>
-                                        <p className='calendarItem__items__p-title'>{schedule.title}</p>
-                                    </li>
-                            )
+            <>
+                <ItemList>
+                    {schedulsDataList.map((schedule, i) => {
+                        const itemDate = format(new Date(schedule.date), "yyyy-MM-dd");
+                        // eslint-disable-next-line no-lone-blocks
+                        {
+                            if(i < 3 ){
+                                return(
+                                    itemDate === dateDay  &&
+                                        <li 
+                                            className='calendarItem__li-items' 
+                                            key={schedule.keyId}
+                                            onClick={() => editModal(schedule)}
+                                        >
+                                            <p className='calendarItem__items__p-date'>{format(new Date(schedule.date), "HH:mm")}</p>
+                                            <p className='calendarItem__items__p-title'>{schedule.title}</p>
+                                        </li>
+                                )
+                            }
                         }
-                    }
-                })}
-            </ItemList>
+                    })}
+                </ItemList>
+            </>
         )
     }
 }

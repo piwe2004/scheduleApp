@@ -4,11 +4,11 @@ import ReactDatePicker from 'react-datepicker'
 import { useDispatch} from 'react-redux'
 import { Button, Form, Icon, Input, Modal, TextArea } from 'semantic-ui-react'
 import { styled } from 'styled-components'
-import { add_schedule, edit_schedule } from '../reducers/schedule'
+import { add_schedule, delete_schedule, edit_schedule } from '../reducers/schedule'
 import "./datepicker.scss"
 
 
-const ModalPop = ({modalOpen, closeModal, editMode, editData}) => {
+const ModalPop = ({modalOpen, closeModal, viewMode, editData}) => {
 
     const dispatch = useDispatch();
     //수정내용
@@ -26,6 +26,13 @@ const ModalPop = ({modalOpen, closeModal, editMode, editData}) => {
     //에러체크
     const [dataError, setDataError] = useState({})
 
+    //수정여부 확인
+    const [editMode, setEditMode] = useState(false)
+
+    const changeMode = () => {
+        setEditMode(true);
+    }
+
     const changeDate = (e) =>{
         setCrrentDate(format(e, "yyyy-MM-dd"));
     }
@@ -33,8 +40,17 @@ const ModalPop = ({modalOpen, closeModal, editMode, editData}) => {
         setCurrentTime(format(e, "HH:mm"));
     }
 
+    const editCencle = () => {
+        setEditMode(false);
+        setScheduleTitle(editData.title)
+        setCrrentDate(format(new Date(editData.date), "yyyy-MM-dd"))
+        setCurrentTime(format(new Date(editData.date), "HH:mm"))
+        setscheduleCnt(editData.content)
+        setIsChecked(editData.isComplate)
+    }
+
     useEffect(() => {
-        if(editMode){
+        if(viewMode){
                 setScheduleTitle(editData.title)
                 setCrrentDate(format(new Date(editData.date), "yyyy-MM-dd"))
                 setCurrentTime(format(new Date(editData.date), "HH:mm"))
@@ -72,6 +88,12 @@ const ModalPop = ({modalOpen, closeModal, editMode, editData}) => {
         }
     }, [scheduleTitle, currentDate])
 
+    const deleteData = () => {
+        dispatch(delete_schedule(editData.keyId))
+        console.log(editData.keyId)
+        setModalClose()
+    }
+
     const handleAddSchedule = () =>{
 
         if(dataChecked()){
@@ -82,7 +104,7 @@ const ModalPop = ({modalOpen, closeModal, editMode, editData}) => {
                     content:scheduleCnt,
                     isComplate:false
                 }))
-            }else{
+            }else {
                 dispatch(edit_schedule({
                     keyId:editData.keyId,
                     title:scheduleTitle,
@@ -101,6 +123,7 @@ const ModalPop = ({modalOpen, closeModal, editMode, editData}) => {
         setscheduleCnt('');
         setCurrentTime('');
         setDataError({})
+        setEditMode(false);
         closeModal();
     }
 
@@ -122,7 +145,7 @@ const ModalPop = ({modalOpen, closeModal, editMode, editData}) => {
                                 value={scheduleTitle}
                                 transparent
                                 onChange={(e)=>setScheduleTitle(e.target.value)}
-
+                                readOnly={viewMode & !editMode ? true : false}
                                 error={dataError.title === false && {
                                     content: '제목을 입력해 주세요.',
                                     pointing: 'below',
@@ -145,6 +168,7 @@ const ModalPop = ({modalOpen, closeModal, editMode, editData}) => {
                                     />
                                     {/* <Input placeholder={format(new Date(), "yyyy-MM-dd")} readOnly transparent value={currentDate}  icon={<Icon name="calendar" alternate="true" outline="true" />} /> */}
                                     <ReactDatePicker 
+                                        readOnly={viewMode & !editMode ? true : false}
                                         selected={currentDate? new Date(currentDate) : new Date()}
                                         onChange={(date) => changeDate(date)}
                                         useWeekdaysShort={true}
@@ -182,6 +206,7 @@ const ModalPop = ({modalOpen, closeModal, editMode, editData}) => {
                                 <ModalCalendar>
                                     <Input placeholder={format(new Date(), "k:mm")} readOnly transparent defaultValue={currentTime}  icon={<Icon name="clock outline" alternate="true" outline="true" />}  />
                                     <ReactDatePicker 
+                                        readOnly={viewMode & !editMode ? true : false}
                                         selected={new Date()} 
                                         onChange={(date) => changeTime(date)}
                                         showTimeSelect
@@ -191,19 +216,51 @@ const ModalPop = ({modalOpen, closeModal, editMode, editData}) => {
                                     />
                                 </ModalCalendar>
                             </CalendarCnt>
-                            <TextArea placeholder='내용' style={{ minHeight: 100, width:'100%' }} defaultValue={scheduleCnt} onChange={(e)=>setscheduleCnt(e.target.value)} />
+                            <TextArea readOnly={viewMode & !editMode ? true : false} placeholder='내용' style={{ minHeight: 100, width:'100%' }} defaultValue={scheduleCnt} onChange={(e)=>setscheduleCnt(e.target.value)} />
                         </Form>
                     </Modal.Content>
                 </ModalContainer>
                 <Modal.Actions>
-                    <Button color='black' onClick={() => setModalClose()}>취소</Button>
-                    <Button
-                        content={editMode ? "수정" : "등록"}
-                        labelPosition='right'
-                        icon='checkmark'
-                        onClick={() => handleAddSchedule()}
-                        positive
-                    />
+                    <Button color='black' onClick={() => setModalClose()}>닫기</Button>
+                    {
+                        editMode 
+                            ? <Button
+                                content='취소'
+                                color='red' 
+                                onClick={() => editCencle()}
+                                icon='close'
+                            /> 
+                            : ''
+                    }
+                    {
+                        editMode || !viewMode
+                            ? <Button
+                                content={editMode ? "수정" : "등록"}
+                                icon='checkmark'
+                                onClick={() => handleAddSchedule()}
+                                positive
+                            />
+                        :''
+                    }
+                    {
+                        viewMode & !editMode 
+                            ?  
+                                <>
+                                    <Button
+                                        content='삭제'
+                                        color='red' 
+                                        onClick={() => deleteData()}
+                                        icon='trash alternate outline'
+                                    /> 
+                                    <Button
+                                        content='수정하기'
+                                        color='facebook' 
+                                        onClick={() => changeMode()}
+                                        icon='edit'
+                                    /> 
+                                </>
+                            : ''
+                    }
                 </Modal.Actions>
             </Modal>
         </PopupBox>        
